@@ -1,3 +1,27 @@
 # SerialCenter
-A library to optimize Arduino serial communication
-Get ACK, implement Fletcher's Checksum and STX & ETX
+Librería dedicada a tener una comunicación por puerto serie efectiva, la comunicación está basada en el el envío y recepción de bytes hasta 64 (por default, pero fácilmente modificable) por mensaje. Aplicando un Caracter de inicio de trama (**STX**), carga útil, un **checksum** básico, un final de trama (**ETX**), mensaje de comprobación automático (**ACK**) y número editable de reintentos. Soporta **softwareSerial**.
+
+
+
+## ¿Cómo usar?
+**Para declarar un objeto de la clase serialCenter:**
+
+	serialCenter serCenter(); //Para Usar en el puerto del hardware serial.
+
+#####################
+	SoftwareSerial	softPort(2,3); //Pin TX, Pin RX
+	serialCenter	softSerialCenter(&softPort); //Para usar un puerto de SoftwareSerial
+
+**Para enviar un mensaje:**
+
+	serCenter.senMessage(byte* arrayPointer, int arrayLength);
+
+**Para recibir un nuevo mensaje:**
+
+	if(Serial.available())
+	{
+		byte arrayMessage[64]; //Aquí se guardarán los datos del mensaje. por default el tamáño máximo del mensaje es 64.
+		int intentos = 3; número máximo de intentos de reenvío de mensajes
+		unsigned long timeOut = 1000; //En milisegundos, tiempo de espera máximo por intento
+		int messageLength = serCenter.readMessage(arrayMessage, intentos, timeOut); //Regresa el tamaño en bytes del mensaje
+	}
