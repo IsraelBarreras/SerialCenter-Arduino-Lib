@@ -1,5 +1,5 @@
 # SerialCenter
-Librería dedicada a tener una comunicación por puerto serie efectiva, la comunicación está basada en el el envío y recepción de bytes hasta 64 (por default, pero fácilmente modificable) por mensaje. Aplicando un Caracter de inicio de trama (**STX**), carga útil, un **checksum** básico, un final de trama (**ETX**), mensaje de comprobación automático (**ACK**) y número editable de reintentos. Soporta **softwareSerial**.
+Librería dedicada a tener una comunicación por puerto serie efectiva, la comunicación está basada en el el envío y recepción de bytes por mensaje. Aplicando un Caracter de inicio de trama (**STX**), carga útil, un **checksum** básico, un final de trama (**ETX**), mensaje de comprobación automático (**ACK**) y número editable de reintentos. Soporta **softwareSerial**.
 
 
 
@@ -20,7 +20,7 @@ Librería dedicada a tener una comunicación por puerto serie efectiva, la comun
 
 	if(Serial.available())
 	{
-		byte arrayMessage[64]; //Aquí se guardarán los datos del mensaje. por default el tamáño máximo del mensaje es 64.
+		byte arrayMessage[64]; //Aquí se guardarán los datos del mensaje. Puedes definir el tamño máximo del mensaje.
 		int intentos = 3; número máximo de intentos de reenvío de mensajes
 		unsigned long timeOut = 1000; //En milisegundos, tiempo de espera máximo por intento
 		int messageLength = serCenter.readMessage(arrayMessage, intentos, timeOut); //Regresa el tamaño en bytes del mensaje
