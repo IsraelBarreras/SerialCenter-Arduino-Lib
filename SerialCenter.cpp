@@ -1,20 +1,20 @@
 #include "Arduino.h"
-#include "serialCenter.h"
+#include "SerialCenter.h"
 #include <SoftwareSerial.h>
 //#define serialDev
 
-  serialCenter::serialCenter()
+  SerialCenter::SerialCenter()
   {
    port = false;
   }
 
-  serialCenter::serialCenter(SoftwareSerial *softPort)
+  SerialCenter::SerialCenter(SoftwareSerial *softPort)
   {
    port = true;
    softwarePort = softPort;
   }
 
- boolean serialCenter::sendMessage(byte *arrayPointer, int arrayLength, int intentos_maximos, unsigned long timeOut)
+ boolean SerialCenter::sendMessage(byte *arrayPointer, int arrayLength, int intentos_maximos, unsigned long timeOut)
  {
   byte intentos = 0;
 #ifdef serialDev
@@ -52,7 +52,7 @@
   return true;
  }
 
- void serialCenter::sendMessageAsString(String message)
+ void SerialCenter::sendMessageAsString(String message)
  {
   int arrayLength = message.length()+1;
   byte arrayPointer[arrayLength];
@@ -73,7 +73,7 @@
   }
  }
 
-  byte serialCenter::ChecksumBEE(const byte *data, int dataLength)
+  byte SerialCenter::ChecksumBEE(const byte *data, int dataLength)
  {
   uint16_t sum = 0;
   for (int index = 0; index < dataLength; index++)
@@ -83,7 +83,7 @@
   return ((sum & 255));
  }
 
-   int serialCenter::tryGetACK(int timeOut)
+   int SerialCenter::tryGetACK(int timeOut)
    {
    if(!port)
    {
@@ -128,7 +128,7 @@
 
   
 
- int serialCenter::readNextMessage(byte *data)
+ int SerialCenter::readNextMessage(byte *data)
  {
   byte head;
   int dataLength = 0;
@@ -228,7 +228,7 @@
   return dataLength;
  }
 
-  int serialCenter::available()
+  int SerialCenter::available()
   {
    if(!port)
    {
@@ -241,7 +241,7 @@
    return 0;
   } 
 
-  void serialCenter::flush()
+  void SerialCenter::flush()
   {
    if(!port)
    {
@@ -253,7 +253,7 @@
    }
   }
 
-  char serialCenter::read()
+  char SerialCenter::read()
   {
    if(!port)
    {

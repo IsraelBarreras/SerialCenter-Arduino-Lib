@@ -1,4 +1,4 @@
-serialCenter	KEYWORD1
+SerialCenter	KEYWORD1
 readNextMessage	KEYWORD2
 sendMessage	KEYWORD2
 ChecksumBEE	KEYWORD2

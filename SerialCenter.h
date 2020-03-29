@@ -1,11 +1,11 @@
-#ifndef serialCenter_h
-#define serialCenter_h
+#ifndef SerialCenter_h
+#define SerialCenter_h
 
 #include "Arduino.h"
 #include <SoftwareSerial.h>
 
-class serialCenter
-{
+class 
+SerialCenter{
   private:
     boolean port;
     SoftwareSerial *softwarePort;
@@ -23,8 +23,8 @@ class serialCenter
     };
     
   public:
-    serialCenter(); // Constructor 1 para hardware serial
-    serialCenter(SoftwareSerial *softPort);// Constructor para software serial
+    SerialCenter(); // Constructor 1 para hardware serial
+    SerialCenter(SoftwareSerial *softPort);// Constructor para software serial
     int readNextMessage(byte *data);//Lee caracteres desde STX hasta ETX y revisa el checksum
     int available();//Bytes disponibles en el puerto
     boolean sendMessage(byte *arrayPointer, int arrayLength, int intentos_maximos, unsigned long timeOut); //Envía un array de caracteres entre STX y ETX

@@ -14,8 +14,8 @@ void setup() {
 void loop() {
   if(mySoftSerial.available())
   {
-    byte arrayMessage[64]
-    int messageLength = mySoftSerial.readMessage(arrayMessage);
+    byte arrayMessage[64];
+    int messageLength = mySoftSerial.readNextMessage(arrayMessage);
 
     for(int i = 0; i < messageLength; i++)
     {
