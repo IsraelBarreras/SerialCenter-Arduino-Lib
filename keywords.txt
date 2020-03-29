@@ -1,6 +1,6 @@
-SerialCenter	KEYWORD1
-available	KEYWORD2
+serialCenter	KEYWORD1
 readNextMessage	KEYWORD2
 sendMessage	KEYWORD2
+ChecksumBEE	KEYWORD2
 tryGetACK	KEYWORD2
-setMAxString	KEYWORD2
+sendMessageAsString	KEYWORD2

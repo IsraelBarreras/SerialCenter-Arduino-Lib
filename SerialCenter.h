@@ -1,10 +1,10 @@
-#ifndef SerialCenter_h
-#define SerialCenter_h
+#ifndef serialCenter_h
+#define serialCenter_h
 
 #include "Arduino.h"
 #include <SoftwareSerial.h>
 
-class SerialCenter
+class serialCenter
 {
   private:
     boolean port;
@@ -14,7 +14,7 @@ class SerialCenter
     const char ACK = '\x006';
     const char NAK = '\x015';
     const int TimeOut = 100;
-    int MAX_STRING_BYTES = 64;
+    
     enum SerialResult
     {
      OK,
@@ -23,14 +23,16 @@ class SerialCenter
     };
     
   public:
-    SerialCenter(); // Constructor 1 para hardware serial
-    SerialCenter(SoftwareSerial *softPort);// Constructor para software serial
-    String readNextMessage();//Lee caracteres desde STX hasta ETX y revisa el checksum
+    serialCenter(); // Constructor 1 para hardware serial
+    serialCenter(SoftwareSerial *softPort);// Constructor para software serial
+    int readNextMessage(byte *data);//Lee caracteres desde STX hasta ETX y revisa el checksum
     int available();//Bytes disponibles en el puerto
-    void sendMessage(String message); //Envía un array de caracteres entre STX y ETX
-    uint16_t ChecksumFletcher16(const byte *data, int dataLength);
+    boolean sendMessage(byte *arrayPointer, int arrayLength, int intentos_maximos, unsigned long timeOut); //Envía un array de caracteres entre STX y ETX
+    void sendMessageAsString(String message);
+    byte ChecksumBEE(const byte *data, int dataLength);
     int tryGetACK(int timeOut);
-    void setMaxString(int MAX);
+    void flush();
+    char read();
     
 };
 
