@@ -6,7 +6,7 @@ Librería dedicada a tener una comunicación por puerto serie efectiva, la comun
 ## ¿Cómo usar?
 **Para declarar un objeto de la clase serialCenter:**
 
-	serialCenter serCenter(); //Para Usar en el puerto del hardware serial.
+	serialCenter serCenter; //Para Usar en el puerto del hardware serial.
 
 #####################
 	SoftwareSerial	softPort(2,3); //Pin TX, Pin RX
