@@ -25,5 +25,5 @@ Librería dedicada a tener una comunicación por puerto serie efectiva, la comun
 	if(Serial.available())
 	{
 		byte arrayMessage[64]; //Aquí se guardarán los datos del mensaje. Puedes definir el tamño máximo del mensaje.
-		int messageLength = serCenter.readMessage(arrayMessage); //Regresa el tamaño en bytes del mensaje
+		int messageLength = serCenter.readNextMessage(arrayMessage); //Regresa el tamaño en bytes del mensaje
 	}
