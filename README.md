@@ -13,15 +13,14 @@ Librería dedicada a tener una comunicación por puerto serie efectiva, la comun
 	serialCenter	softSerialCenter(&softPort); //Para usar un puerto de SoftwareSerial
 
 **Para enviar un mensaje:**
-
-	serCenter.senMessage(byte* arrayPointer, int arrayLength);
+	int intentos = 3; número máximo de intentos de reenvío de mensajes
+	unsigned long timeOut = 1000; //En milisegundos, tiempo de espera máximo por intento
+	serCenter.senMessage(byte* arrayPointer, int arrayLength, intentos, timeOut);
 
 **Para recibir un nuevo mensaje:**
 
 	if(Serial.available())
 	{
 		byte arrayMessage[64]; //Aquí se guardarán los datos del mensaje. Puedes definir el tamño máximo del mensaje.
-		int intentos = 3; número máximo de intentos de reenvío de mensajes
-		unsigned long timeOut = 1000; //En milisegundos, tiempo de espera máximo por intento
-		int messageLength = serCenter.readMessage(arrayMessage, intentos, timeOut); //Regresa el tamaño en bytes del mensaje
+		int messageLength = serCenter.readMessage(arrayMessage); //Regresa el tamaño en bytes del mensaje
 	}
