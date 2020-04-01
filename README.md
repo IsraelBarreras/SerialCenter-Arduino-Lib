@@ -16,7 +16,9 @@ Librería dedicada a tener una comunicación por puerto serie efectiva, la comun
 
 	int intentos = 3; número máximo de intentos de reenvío de mensajes
 	unsigned long timeOut = 1000; //En milisegundos, tiempo de espera máximo por intento
-	serCenter.senMessage(byte* arrayPointer, int arrayLength, intentos, timeOut);
+	int arrayLength = 7;
+	byte arrayPointer[arrayLength] = {0, 1, 86, 254, 41, 32, 88}
+	serCenter.senMessage(arrayPointer, arrayLength, intentos, timeOut);
 
 **Para recibir un nuevo mensaje:**
 
