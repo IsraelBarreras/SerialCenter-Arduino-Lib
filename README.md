@@ -25,9 +25,10 @@ serialCenter	softSerialCenter(&softPort); //Para usar un puerto de SoftwareSeria
 
 **Para recibir un nuevo mensaje:**
 
-
-	if(Serial.available())
-	{
-		byte arrayMessage[64]; //Aquí se guardarán los datos del mensaje. Puedes definir el tamño máximo del mensaje.
-		int messageLength = serCenter.readNextMessage(arrayMessage); //Regresa el tamaño en bytes del mensaje
-	}
+```C++
+if(Serial.available())
+{
+	byte arrayMessage[64]; //Aquí se guardarán los datos del mensaje. Puedes definir el tamño máximo del mensaje.
+	int messageLength = serCenter.readNextMessage(arrayMessage); //Regresa el tamaño en bytes del mensaje
+}
+```
