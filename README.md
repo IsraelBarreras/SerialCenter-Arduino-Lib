@@ -18,7 +18,7 @@ serialCenter	softSerialCenter(&softPort); //Para usar un puerto de SoftwareSeria
 **Para enviar un mensaje:**
 
 ```C++
-int intentos = 3; número máximo de intentos de reenvío de mensajes
+int intentos = 3; //número máximo de intentos de reenvío de mensajes
 unsigned long timeOut = 1000; //En milisegundos, tiempo de espera máximo por intento
 int arrayLength = 7;
 byte arrayPointer[arrayLength] = {0, 1, 86, 254, 41, 32, 88}
