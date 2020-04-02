@@ -6,13 +6,11 @@ Librería dedicada a tener una comunicación por puerto serie efectiva, la comun
 ## ¿Cómo usar?
 **Para declarar un objeto de la clase serialCenter:**
 
-´´´´C++
 
 	serialCenter serCenter; //Para Usar en el puerto del hardware serial.
 ----------------------------------------------------------------------------------
 	SoftwareSerial	softPort(2,3); //Pin TX, Pin RX
 	serialCenter	softSerialCenter(&softPort); //Para usar un puerto de SoftwareSerial
-´´´´
 
 **Para enviar un mensaje:**
 
@@ -25,12 +23,8 @@ Librería dedicada a tener una comunicación por puerto serie efectiva, la comun
 **Para recibir un nuevo mensaje:**
 
 
-´´´´C++
-
 	if(Serial.available())
 	{
 		byte arrayMessage[64]; //Aquí se guardarán los datos del mensaje. Puedes definir el tamño máximo del mensaje.
 		int messageLength = serCenter.readNextMessage(arrayMessage); //Regresa el tamaño en bytes del mensaje
 	}
-	
-´´´´
