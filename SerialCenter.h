@@ -5,7 +5,8 @@
 #include <SoftwareSerial.h>
 
 class 
-SerialCenter{
+SerialCenter
+{
   private:
     boolean port;
     SoftwareSerial *softwarePort;
