@@ -21,10 +21,10 @@
   * Descripción: Constructor de objeto SerialCenter para un puerto de
   * la libreria SoftwareSerial, recibe como parámetro un apuntador a al puerto 
   *****************************************************************/
-  SerialCenter::SerialCenter(Stream *streamPort)
+  /* SerialCenter::SerialCenter(Stream& streamPort)
   {
    port = streamPort;
-  }
+  }*/
 
 
  /*****************************************************************
@@ -48,10 +48,10 @@
 #endif
   do
   {
-   port->write(STX);
-   port->write(arrayPointer, arrayLength);
-   port->write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
-   port->write(ETX);
+   port.write(STX);
+   port.write(arrayPointer, arrayLength);
+   port.write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
+   port.write(ETX);
    
    if(intentos >= intentos_maximos)
    {
@@ -73,10 +73,10 @@
   byte arrayPointer[arrayLength];
   message.toCharArray(arrayPointer, arrayLength);
  
-   port->write(STX);
-   port->write(arrayPointer, arrayLength);
-   port->write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
-   port->write(ETX);
+   port.write(STX);
+   port.write(arrayPointer, arrayLength);
+   port.write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
+   port.write(ETX);
    
  }
 
@@ -107,9 +107,9 @@ int SerialCenter::tryGetACK(int timeOut)
  unsigned long startTime = millis();
  while ((millis() - startTime) < timeOut)
  {
-  if (port->available())
+  if (port.available())
   {
-   if (port->read() == ACK) 
+   if (port.read() == ACK) 
    {
      return OK;
    }
@@ -139,16 +139,16 @@ int SerialCenter::readNextMessage(byte *data)
  byte head;
  int dataLength = 0;
  
- head = port->read();
+ head = port.read();
  
  if(head == STX)
  {  
    int i = 0;
     delay(2);
-    while(port->available())
+    while(port.available())
     {
       delay(2);
-      data[i] = port->read();
+      data[i] = port.read();
       i++;
     }
     dataLength = i;
@@ -172,7 +172,7 @@ int SerialCenter::readNextMessage(byte *data)
     Serial.println("OK");
 #endif
     String message = "";
-    port->print(ACK);       
+    port.print(ACK);       
     return dataLength-2; 
    }
    else
@@ -181,13 +181,13 @@ int SerialCenter::readNextMessage(byte *data)
      Serial.println("error");
 #endif
      data[0] = 0;
-     port->print(NAK);
+     port.print(NAK);
      return dataLength;
    }
    
  }
  
- String desc = port->readString(); //descartar buffer de lectura
+ String desc = port.readString(); //descartar buffer de lectura
 
  data[0] = 0;
  return dataLength;
@@ -202,7 +202,7 @@ int SerialCenter::readNextMessage(byte *data)
 ******************************************************************/
 int SerialCenter::available()
 {
-  return port->available();
+  return port.available();
 } 
 
 
@@ -212,7 +212,7 @@ int SerialCenter::available()
 ******************************************************************/
 void SerialCenter::flush()
 {
-  port->flush();
+  port.flush();
 }
 
 
@@ -222,5 +222,5 @@ void SerialCenter::flush()
 ******************************************************************/
 char SerialCenter::read()
 {
-  return port->read();
+  return port.read();
 }

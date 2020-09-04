@@ -4,12 +4,10 @@
 #include "Arduino.h"
 #include <stream.h>
 
-class 
-SerialCenter
+class  SerialCenter
 {
   private:
-    //boolean port;
-    Stream *port;
+    Stream& port;
     const char STX = '\x002';
     const char ETX = '\x003';
     const char ACK = '\x006';
@@ -24,7 +22,7 @@ SerialCenter
     };
     
   public:
-    SerialCenter(Stream *streamPort);// Constructor para software serial
+    SerialCenter(Stream& streamPort):port(streamPort){}// Constructor
     int readNextMessage(byte *data);//Lee caracteres desde STX hasta ETX y revisa el checksum
     int available();//Bytes disponibles en el puerto
     boolean sendMessage(byte *arrayPointer, int arrayLength, int intentos_maximos, unsigned long timeOut); //Envía un array de caracteres entre STX y ETX
