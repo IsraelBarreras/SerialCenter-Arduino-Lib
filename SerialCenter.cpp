@@ -1,6 +1,8 @@
 #include "Arduino.h"
 #include "SerialCenter.h"
 #include <SoftwareSerial.h>
+
+
 //#define serialDev
 
   /*****************************************************************
@@ -8,10 +10,10 @@
   * Descripción: Constructor de objeto SerialCenter que toma por default 
   * el puerto de serial de arduino UNO
   *****************************************************************/
-  SerialCenter::SerialCenter()
+  /*SerialCenter::SerialCenter()
   {
    port = false;
-  }
+  }*/
 
 
   /*****************************************************************
@@ -19,10 +21,9 @@
   * Descripción: Constructor de objeto SerialCenter para un puerto de
   * la libreria SoftwareSerial, recibe como parámetro un apuntador a al puerto 
   *****************************************************************/
-  SerialCenter::SerialCenter(SoftwareSerial *softPort)
+  SerialCenter::SerialCenter(Stream *streamPort)
   {
-   port = true;
-   softwarePort = softPort;
+   port = streamPort;
   }
 
 
@@ -31,7 +32,7 @@
  * Descripción: Envía un buffer de bytes por el puerto serie asignado en formato serialCenter,
  * recibe como parámetros el array de bytes a enviar (arrayPointer), El tamaño del array (arrayLength),
  * la cantidad de reintentos maximos en caso de error (intentos_maximos) y el 
- * tiempo maximo de espera (timeOut)
+ * tiempo maximo de espera (timeOut) en milisegundos
  *****************************************************************/
  boolean SerialCenter::sendMessage(byte *arrayPointer, int arrayLength, int intentos_maximos, unsigned long timeOut)
  {
@@ -47,20 +48,10 @@
 #endif
   do
   {
-   if(!port)
-   {
-    Serial.write(STX);
-    Serial.write(arrayPointer, arrayLength);
-    Serial.write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
-    Serial.write(ETX);
-   }
-   else
-   {
-    softwarePort->write(STX);
-    softwarePort->write(arrayPointer, arrayLength);
-    softwarePort->write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
-    softwarePort->write(ETX);
-   }
+   port->write(STX);
+   port->write(arrayPointer, arrayLength);
+   port->write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
+   port->write(ETX);
    
    if(intentos >= intentos_maximos)
    {
@@ -81,20 +72,12 @@
   int arrayLength = message.length()+1;
   byte arrayPointer[arrayLength];
   message.toCharArray(arrayPointer, arrayLength);
-  if(!port)
-  {
-   Serial.write(STX);
-   Serial.write(arrayPointer, arrayLength);
-   Serial.write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
-   Serial.write(ETX);
-  }
-  else
-  {
-   softwarePort->write(STX);
-   softwarePort->write(arrayPointer, arrayLength);
-   softwarePort->write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
-   softwarePort->write(ETX);
-  }
+ 
+   port->write(STX);
+   port->write(arrayPointer, arrayLength);
+   port->write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
+   port->write(ETX);
+   
  }
 
 /*****************************************************************
@@ -121,44 +104,21 @@ byte SerialCenter::ChecksumBEE(const byte *data, int dataLength)
  *****************************************************************/
 int SerialCenter::tryGetACK(int timeOut)
 {
- if(!port)
+ unsigned long startTime = millis();
+ while ((millis() - startTime) < timeOut)
  {
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < timeOut)
+  if (port->available())
   {
-   if (Serial.available())
+   if (port->read() == ACK) 
    {
-    if(Serial.read() == ACK) 
-    {
-      return OK;
-    }
-    else 
-    {
-      return ERROR;
-    }
+     return OK;
+   }
+   else
+   {
+     return ERROR;
    }
   }
-  return NO_RESPONSE;
- }
- else
- {
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < timeOut)
-  {
-   if (softwarePort->available())
-   {
-    if (softwarePort->read() == ACK) 
-    {
-      return OK;
-    }
-    else
-    {
-      return ERROR;
-    }
-   }
-  }
-  return NO_RESPONSE;
- }
+ } 
  return NO_RESPONSE;
 }
 
@@ -179,36 +139,17 @@ int SerialCenter::readNextMessage(byte *data)
  byte head;
  int dataLength = 0;
  
- if(!port)
- {
-   head = Serial.read();
- }
- else
- {
-   head = softwarePort->read();
- }
+ head = port->read();
  
  if(head == STX)
  {  
    int i = 0;
     delay(2);
-    if(!port)
+    while(port->available())
     {
-     while(Serial.available())
-     {
-       delay(2);
-       data[i] = Serial.read();
-       i++;
-     }
-    }
-    else
-    {
-     while(softwarePort->available())
-     {
-       delay(2);
-       data[i] = softwarePort->read();
-       i++;
-     }
+      delay(2);
+      data[i] = port->read();
+      i++;
     }
     dataLength = i;
 #ifdef serialDev     
@@ -231,15 +172,7 @@ int SerialCenter::readNextMessage(byte *data)
     Serial.println("OK");
 #endif
     String message = "";
-    if(!port)
-    {
-     Serial.print(ACK);
-    }
-    else
-    {
-     softwarePort->print(ACK);
-    }
-    
+    port->print(ACK);       
     return dataLength-2; 
    }
    else
@@ -248,27 +181,14 @@ int SerialCenter::readNextMessage(byte *data)
      Serial.println("error");
 #endif
      data[0] = 0;
-     if(!port)
-    {
-     Serial.print(NAK);
-    }
-    else
-    {
-     softwarePort->print(NAK);
-    }
+     port->print(NAK);
      return dataLength;
    }
    
  }
  
- if(!port)
- {
-  String desc = Serial.readString();
- }
- else
- {
-  String desc = softwarePort->readString();
- }
+ String desc = port->readString(); //descartar buffer de lectura
+
  data[0] = 0;
  return dataLength;
 }
@@ -282,15 +202,7 @@ int SerialCenter::readNextMessage(byte *data)
 ******************************************************************/
 int SerialCenter::available()
 {
-  if(!port)
-  {
-    return Serial.available();
-  }
-  else
-  {
-    return softwarePort->available();
-  }
-  return 0;
+  return port->available();
 } 
 
 
@@ -300,14 +212,7 @@ int SerialCenter::available()
 ******************************************************************/
 void SerialCenter::flush()
 {
-  if(!port)
-  {
-    Serial.flush();
-  }
-  else
-  {
-    softwarePort->flush();
-  }
+  port->flush();
 }
 
 
@@ -317,13 +222,5 @@ void SerialCenter::flush()
 ******************************************************************/
 char SerialCenter::read()
 {
-  if(!port)
-  {
-   return Serial.read();
-  }
-  else
-  {
-   return softwarePort->read();
-  }
-  return NULL;
+  return port->read();
 }

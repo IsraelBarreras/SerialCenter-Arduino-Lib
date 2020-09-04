@@ -2,14 +2,14 @@
 #define SerialCenter_h
 
 #include "Arduino.h"
-#include <SoftwareSerial.h>
+#include <stream.h>
 
 class 
 SerialCenter
 {
   private:
-    boolean port;
-    SoftwareSerial *softwarePort;
+    //boolean port;
+    Stream *port;
     const char STX = '\x002';
     const char ETX = '\x003';
     const char ACK = '\x006';
@@ -24,8 +24,7 @@ SerialCenter
     };
     
   public:
-    SerialCenter(); // Constructor 1 para hardware serial
-    SerialCenter(SoftwareSerial *softPort);// Constructor para software serial
+    SerialCenter(Stream *streamPort);// Constructor para software serial
     int readNextMessage(byte *data);//Lee caracteres desde STX hasta ETX y revisa el checksum
     int available();//Bytes disponibles en el puerto
     boolean sendMessage(byte *arrayPointer, int arrayLength, int intentos_maximos, unsigned long timeOut); //Envía un array de caracteres entre STX y ETX
