@@ -5,14 +5,14 @@ Librería dedicada a tener una comunicación por puerto serie efectiva, la comun
 
 ## ¿Cómo usar?
 **Para declarar un objeto de la clase serialCenter:**
-
+El constructor recibe como parametr un objeto de la clase base stream.
 ```C++
-serialCenter serCenter; //Para Usar en el puerto del hardware serial.
+serialCenter serCenter(Serial); //Para Usar en el puerto del hardware serial.
 ```
 ----------------------------------------------------------------------------------
 ```C++
 SoftwareSerial	softPort(2,3); //Pin TX, Pin RX
-serialCenter	softSerialCenter(&softPort); //Para usar un puerto de SoftwareSerial
+serialCenter	softSerialCenter(softPort); //Para usar un puerto de SoftwareSerial
 ```
 
 **Para enviar un mensaje:**
