@@ -22,7 +22,7 @@ class  SerialCenter
     };
     
   public:
-    SerialCenter(Stream& streamPort):port(streamPort){}// Constructor
+    SerialCenter(Stream& streamPort):port(streamPort){}// Constructor para software serial
     int readNextMessage(byte *data);//Lee caracteres desde STX hasta ETX y revisa el checksum
     int available();//Bytes disponibles en el puerto
     boolean sendMessage(byte *arrayPointer, int arrayLength, int intentos_maximos, unsigned long timeOut); //Envía un array de caracteres entre STX y ETX

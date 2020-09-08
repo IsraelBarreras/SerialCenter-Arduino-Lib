@@ -5,28 +5,6 @@
 
 //#define serialDev
 
-  /*****************************************************************
-  * Función: constructor para Hardware Serial
-  * Descripción: Constructor de objeto SerialCenter que toma por default 
-  * el puerto de serial de arduino UNO
-  *****************************************************************/
-  /*SerialCenter::SerialCenter()
-  {
-   port = false;
-  }*/
-
-
-  /*****************************************************************
-  * Función: constructor para Software Serial
-  * Descripción: Constructor de objeto SerialCenter para un puerto de
-  * la libreria SoftwareSerial, recibe como parámetro un apuntador a al puerto 
-  *****************************************************************/
-  /* SerialCenter::SerialCenter(Stream& streamPort)
-  {
-   port = streamPort;
-  }*/
-
-
  /*****************************************************************
  * Función: sendMessage
  * Descripción: Envía un buffer de bytes por el puerto serie asignado en formato serialCenter,
@@ -69,13 +47,13 @@
  *****************************************************************/
  void SerialCenter::sendMessageAsString(String message)
  {
-  int arrayLength = message.length()+1;
-  byte arrayPointer[arrayLength];
-  message.toCharArray(arrayPointer, arrayLength);
+  int arrayLength = message.length();
+  byte arrayPointer[arrayLength + 1];
+  message.toCharArray(arrayPointer, arrayLength + 1);
  
    port.write(STX);
    port.write(arrayPointer, arrayLength);
-   port.write(255 - this->ChecksumBEE(arrayPointer, arrayLength));
+   port.write(255 - this->ChecksumBEE(arrayPointer, arrayLength - 1));
    port.write(ETX);
    
  }
@@ -187,7 +165,11 @@ int SerialCenter::readNextMessage(byte *data)
    
  }
  
- String desc = port.readString(); //descartar buffer de lectura
+ while(port.available()) 
+ {
+     char c = port.read();
+ }
+ //descartar buffer de lectura
 
  data[0] = 0;
  return dataLength;
